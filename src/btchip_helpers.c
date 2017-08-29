@@ -54,6 +54,45 @@ unsigned char btchip_output_script_is_op_return(unsigned char *buffer) {
     return (buffer[1] == 0x6A);
 }
 
+#ifdef HAVE_QTUM_SUPPORT
+unsigned char btchip_output_script_is_op_create(unsigned char *buffer){
+    unsigned opPos=0;
+    int i;
+    if(!btchip_output_script_is_regular(buffer) && !btchip_output_script_is_p2sh(buffer) && !btchip_output_script_is_op_return(buffer)){
+// Below code commented out because output scripts bigger than 234 (0xEA) bytes cause Invalid status 6a80 error
+//          if(buffer[0]<0xFD){
+          if(buffer[0]<=0xEA){
+            return (buffer[buffer[0]] == 0xC1);
+//        }else if(buffer[0]==0xFD){
+//            for(i=2;i>0;--i){
+//                opPos=opPos*0xff + (unsigned char)buffer[i];
+//            }
+//            return (buffer[opPos+2] == 0xC1);
+        }else{
+            return 0;
+        }
+    }
+}
+unsigned char btchip_output_script_is_op_call(unsigned char *buffer){
+    unsigned opPos=0;
+        int i;
+        if(!btchip_output_script_is_regular(buffer) && !btchip_output_script_is_p2sh(buffer) && !btchip_output_script_is_op_return(buffer)){
+// Below code commented out because output scripts bigger than 234 (0xEA) bytes cause Invalid status 6a80 error
+//            if(buffer[0]<0xFD){
+            if(buffer[0]<=0xEA){
+                return (buffer[buffer[0]] == 0xC2);
+//            }else if(buffer[0]==0xFD){
+//                for(i=2;i>0;--i){
+//                    opPos=opPos*0xff + (unsigned char)buffer[i];
+//                }
+//                return (buffer[opPos+2] == 0xC2);
+            }else{
+                return 0;
+            }
+        }
+}
+#endif
+
 unsigned char btchip_rng_u8_modulo(unsigned char modulo) {
     unsigned int rng_max = 256 % modulo;
     unsigned int rng_limit = 256 - rng_max;
