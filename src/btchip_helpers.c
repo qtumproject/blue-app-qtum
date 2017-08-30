@@ -56,40 +56,10 @@ unsigned char btchip_output_script_is_op_return(unsigned char *buffer) {
 
 #ifdef HAVE_QTUM_SUPPORT
 unsigned char btchip_output_script_is_op_create(unsigned char *buffer){
-    unsigned opPos=0;
-    int i;
-    if(!btchip_output_script_is_regular(buffer) && !btchip_output_script_is_p2sh(buffer) && !btchip_output_script_is_op_return(buffer)){
-// Below code commented out because output scripts bigger than 234 (0xEA) bytes cause Invalid status 6a80 error
-//          if(buffer[0]<0xFD){
-          if(buffer[0]<=0xEA){
-            return (buffer[buffer[0]] == 0xC1);
-//        }else if(buffer[0]==0xFD){
-//            for(i=2;i>0;--i){
-//                opPos=opPos*0xff + (unsigned char)buffer[i];
-//            }
-//            return (buffer[opPos+2] == 0xC1);
-        }else{
-            return 0;
-        }
-    }
+    return (!btchip_output_script_is_regular(buffer) && !btchip_output_script_is_p2sh(buffer) && !btchip_output_script_is_op_return(buffer) && (buffer[0]<=0xEA) && (buffer[buffer[0]] == 0xC1));
 }
 unsigned char btchip_output_script_is_op_call(unsigned char *buffer){
-    unsigned opPos=0;
-        int i;
-        if(!btchip_output_script_is_regular(buffer) && !btchip_output_script_is_p2sh(buffer) && !btchip_output_script_is_op_return(buffer)){
-// Below code commented out because output scripts bigger than 234 (0xEA) bytes cause Invalid status 6a80 error
-//            if(buffer[0]<0xFD){
-            if(buffer[0]<=0xEA){
-                return (buffer[buffer[0]] == 0xC2);
-//            }else if(buffer[0]==0xFD){
-//                for(i=2;i>0;--i){
-//                    opPos=opPos*0xff + (unsigned char)buffer[i];
-//                }
-//                return (buffer[opPos+2] == 0xC2);
-            }else{
-                return 0;
-            }
-        }
+    return (!btchip_output_script_is_regular(buffer) && !btchip_output_script_is_p2sh(buffer) && !btchip_output_script_is_op_return(buffer) && (buffer[0]<=0xEA) && (buffer[buffer[0]] == 0xC2));
 }
 #endif
 
